@@ -1,4 +1,4 @@
-# Orchestra-Worker
+# Orchestrator-Worker
 
 ![alt text](image.png)
 
