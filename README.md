@@ -7,6 +7,7 @@ Patterns are drawn from the architecture described in
 *A Guide to Event-Driven Design for Agents and Multi-Agent Systems* (Confluent, 2025),
 which covers how data streaming platforms enable scalable, loosely coupled agentic systems.
 
+
 ---
 
 ## Patterns
@@ -36,6 +37,12 @@ for detailed architecture notes.
 A realistic financial analysis payload is included in
 [`orchestrator-worker/payload.md`](orchestrator-worker/payload.md) — a mid-market manufacturing
 credit risk scenario with income statements, balance sheet, cash flows, and peer benchmarks.
+
+> **Disclaimer:** The credit risk analysis produced by this demo is generated entirely by an LLM
+> and is provided for illustrative purposes only. Outputs may vary, contain errors, or reflect
+> model hallucinations. This is not financial or investment advice. Any production-ready
+> credit risk system would require validated models, human oversight, regulatory compliance,
+> and rigorous backtesting before use in real decision-making.
 
 #### Quick start
 
