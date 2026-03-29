@@ -32,7 +32,7 @@ Two implementations are provided:
 
 **CLI version** — runs a credit risk analysis of a fictional company, Acme Precision Parts Inc. The financial data (income statement, balance sheet, cash flows, debt schedule, and peer comparisons) is provided as a document payload in [`orchestrator-worker/payload.md`](orchestrator-worker/payload.md).
 
-**LangGraph Studio version** ([`studio/`](orchestrator-worker/studio/)) — a general-purpose version that takes any goal as free-text input and does not require a document payload. In the Studio input panel, provide only the `goal` field as JSON, e.g. `{"goal": "Rate the top 3 sci-fi movies of 2025"}`. All other state fields are populated automatically by the graph.
+**LangGraph Studio version** ([`studio/`](orchestrator-worker/studio/)) — a general-purpose version that takes any goal as free-text input and does not require a document payload. The number of workers is not fixed — the orchestrator analyzes the goal and determines how many sub-tasks are needed (e.g. a goal comparing 4 cities produces 4 workers). In the Studio input panel, provide only the `goal` field as JSON, e.g. `{"goal": "Rate Toronto, Vancouver, SF, and NYC on affordability levels"}`. All other state fields are populated automatically by the graph.
 
 ![Studio example](orchestrator-worker/studio/studio_screenshot.png)
 

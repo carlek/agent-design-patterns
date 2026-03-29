@@ -64,7 +64,6 @@ class OrchestratorState(TypedDict):
 # ---------------------------------------------------------------------------
 
 LLM = ChatAnthropic(model="claude-sonnet-4-6", temperature=0)
-NUM_WORKERS = 3
 
 
 # ---------------------------------------------------------------------------
@@ -76,8 +75,10 @@ NUM_WORKERS = 3
 _decompose_chain = (
     ChatPromptTemplate.from_messages([
         ("system",
-         "You are an orchestrator. Break the user's goal into exactly {n} "
-         "independent sub-tasks. Output one sub-task per line, no numbering."),
+         "You are an orchestrator. Break the user's goal into the minimum number "
+         "of independent sub-tasks needed. Each sub-task should map to one natural "
+         "unit of work (e.g. one item, one entity, one category) — do NOT split a "
+         "single unit into multiple sub-tasks. Output one sub-task per line, no numbering."),
         ("human", "{goal}"),
     ])
     | LLM
@@ -86,9 +87,10 @@ _decompose_chain = (
 
 
 async def orchestrate_node(state: OrchestratorState) -> dict:
-    raw = await _decompose_chain.ainvoke({"goal": state["goal"], "n": NUM_WORKERS})
+    raw = await _decompose_chain.ainvoke({"goal": state["goal"]})
     lines = [l.strip() for l in raw.strip().splitlines() if l.strip()]
-    lines = (lines + ["(no task)"] * NUM_WORKERS)[:NUM_WORKERS]
+    if not lines:
+        lines = [state["goal"]]
 
     tasks = [
         TaskItem(task_id=str(uuid.uuid4()), partition=i, payload=p)
