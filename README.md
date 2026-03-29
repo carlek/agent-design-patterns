@@ -59,7 +59,12 @@ python orchestrator_worker_langgraph.py
 
 # LangGraph version (show worker attribution table)
 python orchestrator_worker_langgraph.py --provenance
+
+# LangGraph Studio 
+cd studio
+langgraph dev
 ```
+
 
 ---
 
