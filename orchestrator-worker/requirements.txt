@@ -1,0 +1,8 @@
+langchain-anthropic
+langchain-core
+langgraph
+langgraph-api
+langgraph-checkpoint-sqlite
+langgraph-cli
+python-dotenv
+typing_extensions

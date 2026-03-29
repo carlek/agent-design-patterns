@@ -1,0 +1,8 @@
+{
+  "dependencies": ["."],
+  "graphs": {
+      "ratings_workers": "./orchestrator_worker_langgraph.py:graph"
+  },
+  "python_version": "3.12",
+  "env": "./.env"
+}
