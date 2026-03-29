@@ -19,12 +19,12 @@ import operator
 import pathlib
 import uuid
 from typing import Annotated, Any
+from typing_extensions import TypedDict
 
 from dotenv import load_dotenv
 load_dotenv()
 
 from langchain_anthropic import ChatAnthropic
-from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
@@ -36,16 +36,21 @@ from langgraph.types import Send          # used for dynamic fan-out
 # 1.  Shared State  (the only communication channel between nodes)
 # ---------------------------------------------------------------------------
 
-class TaskItem(dict):
-    """Thin wrapper so type hints are self-documenting."""
-    # keys: task_id, partition, payload
+class TaskItem(TypedDict):
+    task_id: str
+    partition: int
+    payload: str
 
 
-class ResultItem(dict):
-    """keys: task_id, partition, worker_id, result, error"""
+class ResultItem(TypedDict):
+    task_id: str
+    partition: int
+    worker_id: int
+    result: str
+    error: str | None
 
 
-class OrchestratorState(dict):
+class OrchestratorState(TypedDict):
     """
     Full graph state.  Annotated[list, operator.add] means each worker
     *appends* its result rather than overwriting — the built-in fan-in reducer.
