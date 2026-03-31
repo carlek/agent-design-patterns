@@ -54,6 +54,7 @@ class OrchestratorState(TypedDict):
     *appends* its result rather than overwriting — the built-in fan-in reducer.
     """
     goal: str                                          # set once by caller
+    show_provenance: bool                              # set once by caller (optional)
     tasks: list[TaskItem]                              # written by orchestrate_node
     results: Annotated[list[ResultItem], operator.add] # appended by each worker_node
     final_answer: str                                  # written by aggregate_node
@@ -166,16 +167,26 @@ async def worker_node(state: dict) -> dict:
 #     Writes: state["final_answer"]
 # ---------------------------------------------------------------------------
 
-_aggregate_chain = (
-    ChatPromptTemplate.from_messages([
-        ("system",
-         "You are an aggregator. Synthesize the worker results into one coherent answer. "
-         "Do not describe the workers or their individual outputs — just write the final answer."),
-        ("human", "Worker results:\n{results}"),
-    ])
-    | LLM
-    | StrOutputParser()
+_AGGREGATE_PROMPT_VERBOSE = (
+    "You are an aggregator. First, produce a brief table showing each worker's "
+    "contribution and its usefulness. Then synthesize all results into one coherent final answer."
 )
+_AGGREGATE_PROMPT_SILENT = (
+    "You are an aggregator. Synthesize the worker results into one coherent answer. "
+    "Do not describe the workers or their individual outputs — just write the final answer."
+)
+
+
+def _make_aggregate_chain(show_provenance: bool):
+    prompt = _AGGREGATE_PROMPT_VERBOSE if show_provenance else _AGGREGATE_PROMPT_SILENT
+    return (
+        ChatPromptTemplate.from_messages([
+            ("system", prompt),
+            ("human", "Worker results:\n{results}"),
+        ])
+        | LLM
+        | StrOutputParser()
+    )
 
 
 async def aggregate_node(state: OrchestratorState) -> dict:
@@ -185,7 +196,8 @@ async def aggregate_node(state: OrchestratorState) -> dict:
         + (r["result"] if not r["error"] else f"ERROR: {r['error']}")
         for r in sorted_results
     )
-    final = await _aggregate_chain.ainvoke({"results": joined})
+    chain = _make_aggregate_chain(state.get("show_provenance", False))
+    final = await chain.ainvoke({"results": joined})
     print("[aggregate_node] synthesis complete")
     return {"final_answer": final}
 
