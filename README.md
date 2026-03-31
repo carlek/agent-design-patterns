@@ -32,9 +32,23 @@ Two implementations are provided:
 
 **CLI version** — runs a credit risk analysis of a fictional company, Acme Precision Parts Inc. The financial data (income statement, balance sheet, cash flows, debt schedule, and peer comparisons) is provided as a document payload in [`orchestrator-worker/payload.md`](orchestrator-worker/payload.md).
 
-**LangGraph Studio version** ([`studio/`](orchestrator-worker/studio/)) — a general-purpose version that takes any goal as free-text input and does not require a document payload. The number of workers is not fixed — the orchestrator analyzes the goal and determines how many sub-tasks are needed (e.g. a goal comparing 4 cities produces 4 workers). In the Studio input panel, provide only the `goal` field as JSON, e.g. `{"goal": "Rate Toronto, Vancouver, SF, and NYC on affordability levels"}`. All other state fields are populated automatically by the graph.
+**LangGraph Studio version** ([`studio/`](orchestrator-worker/studio/)) — a general-purpose version that takes any goal as free-text input and does not require a document payload. The number of workers is not fixed — the orchestrator analyzes the goal and determines how many sub-tasks are needed (e.g. a goal comparing 4 cities produces 4 workers).
+
+In the Studio input panel, provide the initial state as JSON:
+
+```json
+{"goal": "Rate Toronto, Vancouver, SF, and NYC on affordability levels"}
+```
+
+Set `show_provenance` to `true` to include a worker attribution table in the final answer, showing each worker's contribution before the synthesis:
+
+```json
+{"goal": "Rate Toronto, Vancouver, SF, and NYC on affordability levels", "show_provenance": true}
+```
 
 ![Studio example](orchestrator-worker/studio/studio_screenshot.png)
+
+![Studio example with provenance](orchestrator-worker/studio/studio_provenance.png)
 
 See [`orchestrator-worker/orchestrator_worker.md`](orchestrator-worker/orchestrator_worker.md)
 and [`orchestrator-worker/orchestrator_worker_langgraph.md`](orchestrator-worker/orchestrator_worker_langgraph.md)
