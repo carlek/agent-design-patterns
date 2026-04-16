@@ -111,7 +111,7 @@ class WorkerAgent:
         self.platform = platform
 
         # --- LangChain chain ------------------------------------------------
-        _llm = llm or ChatAnthropic(model="claude-sonnet-4-20250514")
+        _llm = llm or ChatAnthropic(model="claude-opus-4-6")
 
         self._chain = (
             ChatPromptTemplate.from_messages(
@@ -181,7 +181,7 @@ class Orchestrator:
     def __init__(self, platform: StreamingPlatform, llm=None) -> None:
         self.platform = platform
 
-        _llm = llm or ChatAnthropic(model="claude-sonnet-4-20250514")
+        _llm = llm or ChatAnthropic(model="claude-opus-4-6")
 
         # Chain 1: decompose goal → sub-tasks (one per line)
         self._decompose_chain = (

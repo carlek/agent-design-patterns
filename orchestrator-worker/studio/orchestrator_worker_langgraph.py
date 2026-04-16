@@ -64,7 +64,7 @@ class OrchestratorState(TypedDict):
 # 2.  LLM (swap freely)
 # ---------------------------------------------------------------------------
 
-LLM = ChatAnthropic(model="claude-sonnet-4-6", temperature=0)
+LLM = ChatAnthropic(model="claude-opus-4-6", temperature=0)
 
 
 # ---------------------------------------------------------------------------

@@ -20,8 +20,9 @@ Here's the skeleton, mapped precisely to that architecture:Skeleton maps directl
 
 **`main()`** — wires it all: creates the platform, spawns 3 worker `asyncio.Task`s in the background, calls `orchestrator.run()`, then `gather`s.
 
-**Future TODO:**
-- Scale partitions: change `NUM_PARTITIONS` — workers and fan-out follow automatically
-- Add tool-calling: give `WorkerAgent._chain` a `bind_tools(...)` call
-- Swap transport: replace the `asyncio.Queue` internals in `StreamingPlatform` with aiokafka `AIOKafkaProducer` / `AIOKafkaConsumer`
-- Add a `LangGraph` state machine on top of `Orchestrator` if you want checkpointing and retry logic
+**TODO:**
+- [x] Scale partitions: change `NUM_PARTITIONS` — workers and fan-out follow automatically
+- [ ] Add tool-calling: give `WorkerAgent._chain` a `bind_tools(...)` call
+- [ ] Swap transport: replace the `asyncio.Queue` internals in `StreamingPlatform` with aiokafka `AIOKafkaProducer` / `AIOKafkaConsumer`
+- [x] Add a `LangGraph` state machine on top of `Orchestrator` 
+  - [ ]  Add checkpointing and retry logic
